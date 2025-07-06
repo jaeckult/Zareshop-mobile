@@ -1,15 +1,15 @@
-import '../items_list.dart';
-import '../models/avito_model.dart';
-import '../constants.dart';
-import 'product_details_screen.dart';
 import 'package:flutter/material.dart';
+import '../../../../shared/widgets/product_list.dart';
+import '../../../../shared/models/product_model.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../../features/product/presentation/screens/product_details_screen.dart';
 
-class AnnouncesScreen extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   @override
-  _AnnouncesScreenState createState() => _AnnouncesScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _AnnouncesScreenState extends State<AnnouncesScreen> with TickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   String selectedCategory = 'All Categories';
   String searchQuery = '';
   late ScrollController _mainScrollController;

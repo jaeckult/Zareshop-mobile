@@ -1,8 +1,8 @@
-import '../constants.dart';
+import 'package:flutter/material.dart';
+import '../../../../core/constants/app_constants.dart';
 import 'my_ads_screen.dart';
 import 'favorites_screen.dart';
 import 'reviews_screen.dart';
-import 'package:flutter/material.dart';
 
 class AccountScreen extends StatelessWidget {
   @override

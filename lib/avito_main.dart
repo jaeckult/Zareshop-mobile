@@ -1,10 +1,10 @@
-import 'screens/acccount_screen.dart';
-import 'screens/announces_screen.dart';
-import 'screens/chat_screen.dart';
-import 'screens/notifications_screen.dart';
-import 'screens/selling__screen.dart';
+import 'features/account/presentation/screens/account_screen.dart';
+import 'features/home/presentation/screens/home_screen.dart';
+import 'features/chat/presentation/screens/chat_screen.dart';
+import 'features/notifications/presentation/screens/notifications_screen.dart';
+import 'features/selling/presentation/screens/selling_screen.dart';
 import 'package:flutter/material.dart';
-import 'constants.dart';
+import 'core/constants/app_constants.dart';
 
 class AvitoMain extends StatefulWidget {
   @override
@@ -24,7 +24,7 @@ class _AvitoMainState extends State<AvitoMain> {
   @override
   Widget build(BuildContext context) {
     List<Widget> _screens = [
-      AnnouncesScreen(),
+      HomeScreen(),
       AccountScreen(),
       SellingScreen(),
       ChatScreen(),

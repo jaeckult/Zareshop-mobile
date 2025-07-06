@@ -1,7 +1,7 @@
-import 'constants.dart';
-import 'models/avito_model.dart';
-import 'screens/product_details_screen.dart';
 import 'package:flutter/material.dart';
+import '../models/product_model.dart';
+import '../../core/constants/app_constants.dart';
+import '../../features/product/presentation/screens/product_details_screen.dart';
 
 class ItemsList extends StatelessWidget {
   final List<AvitoItem> ListData;

@@ -1,6 +1,6 @@
-import '../constants.dart';
-import '../models/avito_model.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../shared/models/product_model.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final AvitoItem item;

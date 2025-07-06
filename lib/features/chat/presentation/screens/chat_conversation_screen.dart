@@ -1,5 +1,5 @@
-import '../constants.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_constants.dart';
 
 class ChatConversationScreen extends StatefulWidget {
   final String userName;

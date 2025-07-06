@@ -31,11 +31,7 @@ class AccountScreen extends StatelessWidget {
                   CircleAvatar(
                     radius: 40,
                     backgroundColor: kAccentColor,
-                    child: Icon(
-                      Icons.person,
-                      size: 40,
-                      color: Colors.white,
-                    ),
+                    child: Icon(Icons.person, size: 40, color: Colors.white),
                   ),
                   SizedBox(height: 12),
                   Text(
@@ -48,19 +44,38 @@ class AccountScreen extends StatelessWidget {
                   ),
                   Text(
                     'Moscow, Russia',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: kTextSecondaryColor,
-                    ),
+                    style: TextStyle(fontSize: 14, color: kTextSecondaryColor),
                   ),
                   SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _buildStatItem('12', 'Active ads'),
+                      _buildStatItem('12', 'My products'),
                       _buildStatItem('45', 'Favorites'),
                       _buildStatItem('8', 'Reviews'),
                     ],
+                  ),
+                  SizedBox(height: 16),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.amber.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.star, color: Colors.amber, size: 20),
+                        SizedBox(width: 6),
+                        Text(
+                          '4.8 / 5.0 • 8 reviews',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -89,9 +104,7 @@ class AccountScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => MyAdsScreen(),
-                        ),
+                        MaterialPageRoute(builder: (context) => MyAdsScreen()),
                       );
                     },
                   ),
@@ -110,14 +123,7 @@ class AccountScreen extends StatelessWidget {
                     },
                   ),
                   _buildDivider(),
-                  _buildMenuItem(
-                    icon: Icons.chat_bubble,
-                    title: 'Messages',
-                    subtitle: 'Chat with buyers',
-                    onTap: () {
-                      // Navigate to messages screen (already exists in main navigation)
-                    },
-                  ),
+                  
                   _buildDivider(),
                   _buildMenuItem(
                     icon: Icons.star,
@@ -193,10 +199,7 @@ class AccountScreen extends StatelessWidget {
                 ),
                 child: Text(
                   'Log Out',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
               ),
             ),
@@ -218,13 +221,7 @@ class AccountScreen extends StatelessWidget {
             color: kAccentColor,
           ),
         ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: kTextSecondaryColor,
-          ),
-        ),
+        Text(label, style: TextStyle(fontSize: 12, color: kTextSecondaryColor)),
       ],
     );
   }
@@ -242,11 +239,7 @@ class AccountScreen extends StatelessWidget {
           color: kAccentColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Icon(
-          icon,
-          color: kAccentColor,
-          size: 20,
-        ),
+        child: Icon(icon, color: kAccentColor, size: 20),
       ),
       title: Text(
         title,
@@ -258,24 +251,14 @@ class AccountScreen extends StatelessWidget {
       ),
       subtitle: Text(
         subtitle,
-        style: TextStyle(
-          fontSize: 12,
-          color: kTextSecondaryColor,
-        ),
+        style: TextStyle(fontSize: 12, color: kTextSecondaryColor),
       ),
-      trailing: Icon(
-        Icons.chevron_right,
-        color: kTextLightColor,
-      ),
+      trailing: Icon(Icons.chevron_right, color: kTextLightColor),
       onTap: onTap,
     );
   }
 
   Widget _buildDivider() {
-    return Divider(
-      height: 1,
-      color: kBorderColor,
-      indent: 56,
-    );
+    return Divider(height: 1, color: kBorderColor, indent: 56);
   }
 }

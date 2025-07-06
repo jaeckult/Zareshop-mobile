@@ -7,57 +7,29 @@ class SellingScreen extends StatefulWidget {
 }
 
 class _SellingScreenState extends State<SellingScreen> {
-  String selectedCategory = 'Electronics';
   final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _priceController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _locationController = TextEditingController();
+  
+  // Business Information Controllers
+  final _businessNameController = TextEditingController();
+  final _businessDescriptionController = TextEditingController();
+  final _businessAddressController = TextEditingController();
+  final _businessPhoneController = TextEditingController();
+  final _businessEmailController = TextEditingController();
+  final _businessWebsiteController = TextEditingController();
+  
+  // File upload states
+  bool _licenseUploaded = false;
+  bool _coverPictureUploaded = false;
+  bool _faydaUploaded = false;
+  
+  // Business category
+  String selectedCategory = 'Retail';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: kTextPrimaryColor),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          'Create Ad',
-          style: TextStyle(
-            color: kTextPrimaryColor,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          TextButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                // Handle ad creation
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Ad created successfully!'),
-                    backgroundColor: kAccentColor,
-                  ),
-                );
-              }
-            },
-            child: Text(
-              'Publish',
-              style: TextStyle(
-                color: kAccentColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
+      
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Form(
@@ -65,9 +37,67 @@ class _SellingScreenState extends State<SellingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Category selection
+              // Header Section
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: kAccentColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: kAccentColor.withOpacity(0.3)),
+                ),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.store,
+                      size: 48,
+                      color: kAccentColor,
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      'Join ZareShop as a Vendor',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: kTextPrimaryColor,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Start selling your products to thousands of customers',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: kTextSecondaryColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 24),
+              
+              // Business Information Section
+              _buildSectionHeader('Business Information', Icons.business),
+              SizedBox(height: 16),
+              
+              // Business Name
+              _buildTextField(
+                controller: _businessNameController,
+                label: 'Business Name',
+                hint: 'Enter your business name',
+                icon: Icons.store,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter business name';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              
+              // Business Category
               Text(
-                'Category',
+                'Business Category',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -86,17 +116,21 @@ class _SellingScreenState extends State<SellingScreen> {
                   value: selectedCategory,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'Select category',
+                    hintText: 'Select business category',
+                    icon: Icon(Icons.category, color: kTextLightColor),
                   ),
                   items: [
+                    'Retail',
                     'Electronics',
-                    'Cars',
-                    'Real Estate',
-                    'Furniture',
-                    'Clothing',
+                    'Fashion',
+                    'Home & Garden',
+                    'Automotive',
+                    'Health & Beauty',
+                    'Sports & Leisure',
+                    'Books & Media',
+                    'Food & Beverage',
                     'Services',
-                    'Jobs',
-                    'Pets',
+                    'Other',
                   ].map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -110,195 +144,165 @@ class _SellingScreenState extends State<SellingScreen> {
                   },
                 ),
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 16),
               
-              // Title
-              Text(
-                'Title',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: kTextPrimaryColor,
-                ),
-              ),
-              SizedBox(height: 8),
-              TextFormField(
-                controller: _titleController,
-                decoration: InputDecoration(
-                  hintText: 'Enter item title',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: kBorderColor),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: kBorderColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: kAccentColor),
-                  ),
-                ),
+              // Business Description
+              _buildTextField(
+                controller: _businessDescriptionController,
+                label: 'Business Description',
+                hint: 'Describe your business and what you sell...',
+                icon: Icons.description,
+                maxLines: 3,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a title';
+                    return 'Please enter business description';
                   }
                   return null;
                 },
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 16),
               
-              // Price
-              Text(
-                'Price',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: kTextPrimaryColor,
-                ),
-              ),
-              SizedBox(height: 8),
-              TextFormField(
-                controller: _priceController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: 'Enter price',
-                  prefixText: '₽ ',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: kBorderColor),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: kBorderColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: kAccentColor),
-                  ),
-                ),
+              // Business Address
+              _buildTextField(
+                controller: _businessAddressController,
+                label: 'Business Address',
+                hint: 'Enter your business address',
+                icon: Icons.location_on,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a price';
+                    return 'Please enter business address';
                   }
                   return null;
                 },
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 16),
               
-              // Description
-              Text(
-                'Description',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: kTextPrimaryColor,
-                ),
-              ),
-              SizedBox(height: 8),
-              TextFormField(
-                controller: _descriptionController,
-                maxLines: 4,
-                decoration: InputDecoration(
-                  hintText: 'Describe your item...',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: kBorderColor),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: kBorderColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: kAccentColor),
-                  ),
-                ),
+              // Contact Information Section
+              _buildSectionHeader('Contact Information', Icons.contact_phone),
+              SizedBox(height: 16),
+              
+              // Business Phone
+              _buildTextField(
+                controller: _businessPhoneController,
+                label: 'Business Phone',
+                hint: 'Enter business phone number',
+                icon: Icons.phone,
+                keyboardType: TextInputType.phone,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a description';
+                    return 'Please enter business phone';
                   }
                   return null;
                 },
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 16),
               
-              // Location
-              Text(
-                'Location',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: kTextPrimaryColor,
-                ),
-              ),
-              SizedBox(height: 8),
-              TextFormField(
-                controller: _locationController,
-                decoration: InputDecoration(
-                  hintText: 'Enter location',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: kBorderColor),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: kBorderColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: kAccentColor),
-                  ),
-                ),
+              // Business Email
+              _buildTextField(
+                controller: _businessEmailController,
+                label: 'Business Email',
+                hint: 'Enter business email address',
+                icon: Icons.email,
+                keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a location';
+                    return 'Please enter business email';
+                  }
+                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                    return 'Please enter a valid email';
                   }
                   return null;
+                },
+              ),
+              SizedBox(height: 16),
+              
+              // Business Website (Optional)
+              _buildTextField(
+                controller: _businessWebsiteController,
+                label: 'Business Website (Optional)',
+                hint: 'Enter your website URL',
+                icon: Icons.language,
+                keyboardType: TextInputType.url,
+              ),
+              SizedBox(height: 24),
+              
+              // Required Documents Section
+              _buildSectionHeader('Required Documents', Icons.folder_special),
+              SizedBox(height: 8),
+              Text(
+                'Please upload the following documents to complete your vendor registration',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: kTextSecondaryColor,
+                ),
+              ),
+              SizedBox(height: 16),
+              
+              // License Upload
+              _buildFileUploadCard(
+                title: 'Business License',
+                subtitle: 'Upload your business license or permit',
+                icon: Icons.description,
+                isUploaded: _licenseUploaded,
+                onTap: () {
+                  setState(() {
+                    _licenseUploaded = !_licenseUploaded;
+                  });
+                },
+              ),
+              SizedBox(height: 12),
+              
+              // Cover Picture Upload
+              _buildFileUploadCard(
+                title: 'Business Cover Picture',
+                subtitle: 'Upload a cover image for your business',
+                icon: Icons.image,
+                isUploaded: _coverPictureUploaded,
+                onTap: () {
+                  setState(() {
+                    _coverPictureUploaded = !_coverPictureUploaded;
+                  });
+                },
+              ),
+              SizedBox(height: 12),
+              
+              // Fayda Upload
+              _buildFileUploadCard(
+                title: 'Fayda Image',
+                subtitle: 'Upload your Fayda business image',
+                icon: Icons.photo_library,
+                isUploaded: _faydaUploaded,
+                onTap: () {
+                  setState(() {
+                    _faydaUploaded = !_faydaUploaded;
+                  });
                 },
               ),
               SizedBox(height: 32),
               
-              // Photo upload section
-              Text(
-                'Photos',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: kTextPrimaryColor,
-                ),
-              ),
-              SizedBox(height: 8),
+              // Terms and Conditions
               Container(
-                width: double.infinity,
-                height: 120,
+                padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.grey[50],
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: kBorderColor),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Row(
                   children: [
                     Icon(
-                      Icons.add_photo_alternate,
-                      size: 32,
-                      color: kTextLightColor,
+                      Icons.info_outline,
+                      color: kAccentColor,
+                      size: 20,
                     ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Add photos',
-                      style: TextStyle(
-                        color: kTextSecondaryColor,
-                        fontSize: 14,
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'By submitting this form, you agree to our vendor terms and conditions. Your application will be reviewed within 2-3 business days.',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: kTextSecondaryColor,
+                        ),
                       ),
                     ),
                   ],
@@ -306,17 +310,25 @@ class _SellingScreenState extends State<SellingScreen> {
               ),
               SizedBox(height: 32),
               
-              // Submit button
+              // Submit Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Handle form submission
+                    if (_formKey.currentState!.validate() && 
+                        _licenseUploaded && _coverPictureUploaded && _faydaUploaded) {
+                      // Handle vendor registration
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Ad created successfully!'),
+                          content: Text('Vendor registration submitted successfully!'),
                           backgroundColor: kAccentColor,
+                        ),
+                      );
+                    } else if (!_licenseUploaded || !_coverPictureUploaded || !_faydaUploaded) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Please upload all required documents'),
+                          backgroundColor: Colors.red,
                         ),
                       );
                     }
@@ -329,7 +341,7 @@ class _SellingScreenState extends State<SellingScreen> {
                     ),
                   ),
                   child: Text(
-                    'Create Ad',
+                    'Submit Vendor Application',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -338,6 +350,7 @@ class _SellingScreenState extends State<SellingScreen> {
                   ),
                 ),
               ),
+              SizedBox(height: 20),
             ],
           ),
         ),
@@ -345,12 +358,151 @@ class _SellingScreenState extends State<SellingScreen> {
     );
   }
 
+  Widget _buildSectionHeader(String title, IconData icon) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          color: kAccentColor,
+          size: 24,
+        ),
+        SizedBox(width: 12),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: kTextPrimaryColor,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+    required IconData icon,
+    int maxLines = 1,
+    TextInputType? keyboardType,
+    String? Function(String?)? validator,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: kTextPrimaryColor,
+          ),
+        ),
+        SizedBox(height: 8),
+        TextFormField(
+          controller: controller,
+          maxLines: maxLines,
+          keyboardType: keyboardType,
+          decoration: InputDecoration(
+            hintText: hint,
+            prefixIcon: Icon(icon, color: kTextLightColor),
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: kBorderColor),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: kBorderColor),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: kAccentColor),
+            ),
+          ),
+          validator: validator,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFileUploadCard({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required bool isUploaded,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isUploaded ? kAccentColor.withOpacity(0.1) : Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isUploaded ? kAccentColor : kBorderColor,
+            width: isUploaded ? 2 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isUploaded ? kAccentColor : Colors.grey[100],
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Icon(
+                isUploaded ? Icons.check : icon,
+                color: isUploaded ? Colors.white : kTextLightColor,
+                size: 20,
+              ),
+            ),
+            SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: kTextPrimaryColor,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: kTextSecondaryColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              isUploaded ? Icons.check_circle : Icons.upload_file,
+              color: isUploaded ? kAccentColor : kTextLightColor,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
-    _titleController.dispose();
-    _priceController.dispose();
-    _descriptionController.dispose();
-    _locationController.dispose();
+    _businessNameController.dispose();
+    _businessDescriptionController.dispose();
+    _businessAddressController.dispose();
+    _businessPhoneController.dispose();
+    _businessEmailController.dispose();
+    _businessWebsiteController.dispose();
     super.dispose();
   }
 }

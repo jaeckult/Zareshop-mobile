@@ -29,6 +29,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         timeAgo: '2 hours ago',
         category: 'Electronics',
         isFavorite: true,
+    link: 'https://www.avito.ru/moskva/telefony/iphone_14_pro_max_256gb_otlichnoe_sostoyanie_1234567890',
+
       ),
       AvitoItem(
         title: 'Toyota Camry 2019 - Low mileage, perfect condition',
@@ -38,6 +40,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         timeAgo: '5 hours ago',
         category: 'Cars',
         isFavorite: true,
+    link: 'https://www.avito.ru/moskva/telefony/iphone_14_pro_max_256gb_otlichnoe_sostoyanie_1234567890',
+
       ),
       AvitoItem(
         title: 'MacBook Pro M2 512GB - Like new',
@@ -47,6 +51,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         timeAgo: '3 hours ago',
         category: 'Electronics',
         isFavorite: true,
+    link: 'https://www.avito.ru/moskva/telefony/iphone_14_pro_max_256gb_otlichnoe_sostoyanie_1234567890',
+
       ),
     ];
   }

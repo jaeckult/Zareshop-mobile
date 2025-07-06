@@ -6,6 +6,11 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../../features/product/presentation/screens/product_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  final Function(AvitoItem)? onAddToCart;
+  final Function(String)? onRemoveFromCart;
+  
+  const HomeScreen({Key? key, this.onAddToCart, this.onRemoveFromCart}) : super(key: key);
+  
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -26,6 +31,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   // Mutable list for managing favorite state
   late List<AvitoItem> _items;
   Set<String> _favoriteIds = {};
+  
+  // Cart state management
+  Set<String> _cartItemIds = {};
   
   // Hover state management
   String? _hoveredItemId;
@@ -143,6 +151,42 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         _favoriteIds.add(item.title);
       }
     });
+  }
+
+  // Helper method to check if an item is in cart
+  bool _isInCart(AvitoItem item) {
+    return _cartItemIds.contains(item.title);
+  }
+
+  // Method to add item to cart
+  void _addToCart(AvitoItem item) {
+    if (_isInCart(item)) {
+      // Item is in cart, remove it
+      setState(() {
+        _cartItemIds.remove(item.title);
+      });
+      
+      if (widget.onRemoveFromCart != null) {
+        widget.onRemoveFromCart!(item.title);
+      }
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${item.title} removed from cart'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } else {
+      // Item is not in cart, add it
+      setState(() {
+        _cartItemIds.add(item.title);
+      });
+      
+      if (widget.onAddToCart != null) {
+        widget.onAddToCart!(item);
+      }
+    }
   }
 
   // Calculate animation values based on scroll position
@@ -666,7 +710,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductDetailsScreen(item: item),
+            builder: (context) => ProductDetailsScreen(
+              item: item,
+              onAddToCart: widget.onAddToCart,
+              onRemoveFromCart: widget.onRemoveFromCart,
+            ),
           ),
         );
       },
@@ -776,19 +824,39 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       Positioned(
                         top: 8,
                         right: 8,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.9),
-                            shape: BoxShape.circle,
-                          ),
-                          child: IconButton(
-                            icon: Icon(
-                              _isFavorite(item) ? Icons.favorite : Icons.favorite_border,
-                              color: _isFavorite(item) ? Colors.red : kTextLightColor,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: _isInCart(item) ? kAccentColor : Colors.white.withOpacity(0.9),
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                icon: Icon(
+                                  _isInCart(item) ? Icons.shopping_cart : Icons.shopping_cart_outlined,
+                                  color: _isInCart(item) ? Colors.white : kAccentColor,
+                                ),
+                                onPressed: () => _addToCart(item),
+                                iconSize: 20,
+                              ),
                             ),
-                            onPressed: () => _toggleFavorite(item),
-                            iconSize: 20,
-                          ),
+                            SizedBox(width: 8),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.9),
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                icon: Icon(
+                                  _isFavorite(item) ? Icons.favorite : Icons.favorite_border,
+                                  color: _isFavorite(item) ? Colors.red : kTextLightColor,
+                                ),
+                                onPressed: () => _toggleFavorite(item),
+                                iconSize: 20,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],

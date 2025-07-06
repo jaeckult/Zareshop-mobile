@@ -7,8 +7,10 @@ import 'package:share_plus/share_plus.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final AvitoItem item;
+  final Function(AvitoItem)? onAddToCart;
+  final Function(String)? onRemoveFromCart;
 
-  ProductDetailsScreen({required this.item});
+  ProductDetailsScreen({required this.item, this.onAddToCart, this.onRemoveFromCart});
 
   @override
   _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
@@ -17,6 +19,44 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int _currentImageIndex = 0;
   bool _isFavorite = false;
+  bool _isInCart = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Check if item is in cart (this would typically come from a cart service)
+    // For now, we'll start with false and update when added
+  }
+
+  void _addToCart() {
+    if (_isInCart) {
+      // Item is in cart, remove it
+      setState(() {
+        _isInCart = false;
+      });
+      
+      if (widget.onRemoveFromCart != null) {
+        widget.onRemoveFromCart!(widget.item.title);
+      }
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${widget.item.title} removed from cart'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } else {
+      // Item is not in cart, add it
+      setState(() {
+        _isInCart = true;
+      });
+      
+      if (widget.onAddToCart != null) {
+        widget.onAddToCart!(widget.item);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +81,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               onPressed: () => Navigator.pop(context),
             ),
             actions: [
+              IconButton(
+                icon: Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: _isInCart ? kAccentColor : Colors.white.withOpacity(0.9),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    _isInCart ? Icons.shopping_cart : Icons.shopping_cart_outlined,
+                    color: _isInCart ? Colors.white : kAccentColor,
+                  ),
+                ),
+                onPressed: () {
+                  _addToCart();
+                },
+              ),
               IconButton(
                 icon: Container(
                   padding: EdgeInsets.all(8),
